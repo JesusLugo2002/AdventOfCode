@@ -4,9 +4,8 @@ class Report():
     def __init__(self, levels: list):
         self.levels = [int(level) for level in levels]
     
-    def is_safe(self):
-        for index in range(len(self.levels[:len(self.levels) - 1])):
-            pass # TODO
+    def __len__(self) -> int:
+        return len(self.levels)
 
 
 def get_reports(file_url: str):
