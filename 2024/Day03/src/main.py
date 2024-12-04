@@ -1,6 +1,6 @@
 import re
 
-PUZZLE_INPUT_URL = './files/demo-input.txt'
+PUZZLE_INPUT_URL = './files/puzzle-input.txt'
 
 def get_file_content(file_url: str) -> str:
     result = ''
@@ -20,13 +20,8 @@ def multiply_parts(parts: list[str]) -> int:
         result += int(values[1]) * int(values[2])
     return result
 
-def separate_instructions(text: str) -> tuple:
-    # TODO
-    first_section = re.findall(r'(.*)do\(\)|don\'t\(\)', text)
-    print(first_section)
-    invalid_sections = re.findall(r'don\'t\(\)(.*)(?:do\(\))', text)
-    valid_sections = re.findall(r'do\(\)(.*)(?:don\'t\(\))?', text)
-    return first_section + valid_sections, invalid_sections
+def get_valid_instructions(text: str) -> list:
+    return re.findall(r'(?:do\(\)|^)(.*?)(?:don\'t\(\)|$)', text)
 
 if __name__ == '__main__':
     # Part One
@@ -36,4 +31,6 @@ if __name__ == '__main__':
     print(mul_result) # Result => 175015740
 
     # Part Two
-    sections = separate_instructions(text)
+    text = ''.join(get_valid_instructions(text))
+    mul_result = multiply_parts(get_valid_parts(text))
+    print(mul_result) # Result => 112272912
