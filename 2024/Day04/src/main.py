@@ -1,5 +1,5 @@
 PUZZLE_INPUT_URL = './files/puzzle-input.txt'
-TARGET_WORD = 'XMAS'
+
 
 def get_letter_soup(file_url: str) -> list[list[str]]:
     with open(PUZZLE_INPUT_URL, 'r') as file:
@@ -81,11 +81,37 @@ def count_words(letter_soup: list[list[str]], target_word: str) -> int:
                 result += get_matches(row, col)
     return result
                 
-
+def count_xmas(letter_soup: list[list[str]]) -> int:
+    def get_match(row: int, col: int):
+        POSIBLE_COMBINATIONS = (('M', 'M', 'S', 'S'), ('S', 'M', 'S', 'M'), ('S', 'S', 'M', 'M'), ('M', 'S', 'M', 'S'))
+        if row - 1 >= 0 or col - 1 >= 0:
+            try:
+                top_left = letter_soup[row - 1][col - 1]
+                top_right = letter_soup[row - 1][col + 1]
+                bottom_left = letter_soup[row + 1][col - 1]
+                bottom_right = letter_soup[row + 1][col + 1]
+            except IndexError:
+                return False
+            current_combination = (top_left, top_right, bottom_left, bottom_right)
+            for combination in POSIBLE_COMBINATIONS:
+                if current_combination == combination:
+                    return True
+        return False
+    
+    result = 0
+    for row in range(len(letter_soup)):
+        for col in range(len(letter_soup[row])):
+            if letter_soup[row][col] == 'A':
+                result += get_match(row, col)
+    return result
 
 if __name__ == '__main__':
+    # Part One
     LETTER_SOUP = get_letter_soup(PUZZLE_INPUT_URL)
-    xmas_count = count_words(LETTER_SOUP, TARGET_WORD)
-    print(xmas_count) # Solution => 2613
+    TARGET_WORD = 'XMAS'
+    word_count = count_words(LETTER_SOUP, TARGET_WORD)
+    print(word_count) # Solution => 2613
 
-    
+    # Part Two
+    x_mas_count = count_xmas(LETTER_SOUP)
+    print(x_mas_count)
